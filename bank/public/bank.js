@@ -25,41 +25,30 @@ class Customer {
   }
   // Method to calculate customer balance
   getBalance() {
-    try {
-      const balance = this.transactions.reduce(
-        (total, transaction) => total + transaction.amount,
-        0
-      );
-      return balance;
-    } catch (error) {
-      console.log(`Error calculating balance: ${error}`);
-      return 0;
-    }
+    const balance = this.transactions.reduce(
+      (total, transaction) => total + transaction.amount,
+      0
+    );
+    return balance;
   }
   // Method to add transaction for the customer this will make sure the transaction will not make balance negative
   addTransactions(amount) {
     const transaction = new Transaction(amount);
-    try {
-      const currentBalance = this.getBalance();
-      const newBalance = currentBalance + amount;
-      if (newBalance < 0) {
-        console.log(
-          "Transaction cannot be added. Balance would become negative."
-        );
-        return false;
-      }
-      this.transactions.push(transaction);
-      // Check if the transaction was added successfully
-      if (this.transactions.includes(transaction)) {
-        return true;
-      } else {
-        // Transaction not added, handle the error
-        console.error("Failed to add transaction:", transaction);
-        return false;
-      }
-    } catch (error) {
-      // Error occurred during transaction addition, handle the error
-      console.error("Error adding transaction:", error);
+
+    const currentBalance = this.getBalance();
+    const newBalance = currentBalance + amount;
+    if (newBalance < 0) {
+     throw new Error(
+       "Transaction cannot be added. Balance would become negative."
+     );
+    }
+    this.transactions.push(transaction);
+    // Check if the transaction was added successfully
+    if (this.transactions.includes(transaction)) {
+      return true;
+    } else {
+      // Transaction not added, handle the error
+      console.error("Failed to add transaction:", transaction);
       return false;
     }
   }
@@ -79,34 +68,24 @@ class Branch {
   }
   // Method to add customer to the branch
   addCustomer(customer) {
-    try {
-      //  check if the customer already exists
-      if (!this.customers.includes(customer)) {
-        this.customers.push(customer);
-        return true;
-      } else {
-        return false; // Customer already exists
-      }
-    } catch (error) {
-      console.log(`Error adding customer: ${error}`);
-      return false;
+    //  check if the customer already exists
+    if (!this.customers.includes(customer)) {
+      this.customers.push(customer);
+      return true;
+    } else {
+        throw new Error("Customer already exists in the branch.");// Customer already exists
     }
   }
   // Method to add transaction for a customer of the branch
   addCustomerTransaction(customerId, amount) {
-    try {
-      const foundCustomer = this.customers.find(
-        (customer) => customer.id === customerId
-      );
-      if (foundCustomer) {
-        foundCustomer.addTransactions(amount);
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.log(`Error adding customer transaction: ${error}`);
-      return false;
+    const foundCustomer = this.customers.find(
+      (customer) => customer.id === customerId
+    );
+    if (foundCustomer) {
+      foundCustomer.addTransactions(amount);
+      return true;
+    } else {
+        throw new Error("Customer not found in the branch.");
     }
   }
   // Method to search for customers by name
@@ -116,24 +95,8 @@ class Branch {
       customer.name.toLowerCase().includes(keyword)
     );
   }
-  // Method to list customers of the branch
-  listCustomers(includeTransactions) {
-    try {
-      let output = `Customers of ${this.name}:\n`;
-      this.customers.forEach((customer) => {
-        output += `Customer: ${customer.getName()}\n`;
-        if (includeTransactions) {
-          output += "Transactions:\n";
-          customer.getTransactions().forEach((transaction) => {
-            output += `Amount: ${transaction.amount}, Date: ${transaction.date}\n`;
-          });
-        }
-      });
-      return output; // Return the output string
-    } catch (error) {
-      console.log(`Error listing customers: ${error}`);
-    }
-  }
+
+ 
 }
 class Bank {
   constructor(name) {
@@ -151,8 +114,8 @@ class Bank {
         return false; // Branch already exists
       }
     } catch (error) {
-      console.log(`Error adding branch: ${error}`);
-      return false;
+       console.error(` ${error.message}`);
+       return false;
     }
   }
   // Method to find branch by name
@@ -167,7 +130,7 @@ class Bank {
         return null;
       }
     } catch (error) {
-      console.log(`Error finding branch by name: ${error}`);
+      console.log(` ${error}`);
       return null;
     }
   }
@@ -180,7 +143,7 @@ class Bank {
       }
       return false;
     } catch (error) {
-      console.log(`Error adding customer: ${error}`);
+      console.log(` ${error}`);
       return false;
     }
   }
@@ -193,7 +156,7 @@ class Bank {
       }
       return false;
     } catch (error) {
-      console.log(`Error adding customer transaction: ${error}`);
+      console.log(` ${error}`);
       return false;
     }
   }
@@ -206,7 +169,7 @@ class Bank {
         return false;
       }
     } catch (error) {
-      console.log(`Error checking branch: ${error}`);
+      console.log(` ${error}`);
       return false;
     }
   }
@@ -224,11 +187,21 @@ class Bank {
     try {
       const specificBranch = this.findBranchByName(branch.getName());
       if (specificBranch) {
-        return specificBranch.listCustomers(includeTransactions);
+        console.log(`Customers of ${branch.getName()}:\n`);
+        branch.customers.forEach((customer) => {
+          console.log(`Customer: ${customer.getName()}\n`);
+          if (includeTransactions) {
+            console.log("Transactions:\n");
+            customer.getTransactions().forEach((transaction) => {
+              console.log(
+                `Amount: ${transaction.amount}, Date: ${transaction.date}\n`
+              );
+            });
+          }
+        });
       }
     } catch (error) {
       console.log(`Error listing customers: ${error}`);
-      return "";
     }
   }
 }

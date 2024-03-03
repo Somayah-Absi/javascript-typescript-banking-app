@@ -8,5 +8,5 @@
     
   },
   
-  "files": ["./src/bank.ts", "./src/bank.ts"]
+  "files": ["./src/bank.ts", "./src/branch.ts","./src/customer.ts","./src/transaction.ts"]
 }
