@@ -7,15 +7,15 @@ export class Branch {
     this.customers = [];
   }
   // Method to get branch name
-  getName() {
+  getName():string {
     return this.name;
   }
   // Method to get customers of the branch
-  getCustomers() {
+  getCustomers():Customer[] {
     return this.customers;
   }
   // Method to add customer to the branch
-  addCustomer(customer: Customer) {
+  addCustomer(customer: Customer):boolean {
     //  check if the customer already exists
     if (!this.customers.includes(customer)) {
       this.customers.push(customer);
@@ -26,7 +26,7 @@ export class Branch {
     }
   }
   // Method to add transaction for a customer of the branch
-  addCustomerTransaction(customerId: number, amount: number) {
+  addCustomerTransaction(customerId: number, amount: number):boolean {
     const foundCustomer = this.customers.find(
       (customer) => customer.id === customerId
     );

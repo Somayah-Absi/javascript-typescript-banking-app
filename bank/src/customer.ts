@@ -10,19 +10,19 @@ export class Customer {
     this.transactions = [];
   }
   // Method to get customer name
-  getName() {
+  getName():string {
     return this.name;
   }
   // Method to get customer ID
-  getId() {
+  getId() :number{
     return this.id;
   }
   // Method to get customer transactions
-  getTransactions() {
+  getTransactions() :Transaction[]{
     return this.transactions;
   }
   // Method to calculate customer balance
-  getBalance() {
+  getBalance():number {
     const balance = this.transactions.reduce(
       (total, transaction) => total + transaction.amount,
       0
@@ -30,7 +30,7 @@ export class Customer {
     return balance;
   }
   // Method to add transaction for the customer this will make sure the transaction will not make balance negative
-  addTransactions(amount: number) {
+  addTransactions(amount: number):boolean {
     const transaction = new Transaction(amount);
 
     const currentBalance = this.getBalance();

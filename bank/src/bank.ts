@@ -9,7 +9,7 @@ class Bank {
     this.branches = [];
   }
   // Method to add branch to the bank
-  addBranch(branch: Branch) {
+  addBranch(branch: Branch):boolean {
     try {
       //  check if the branch already exists
       if (!this.checkBranch(branch)) {
@@ -24,7 +24,7 @@ class Bank {
     }
   }
   // Method to find branch by name
-  findBranchByName(branchName: string) {
+  findBranchByName(branchName: string):Branch|null {
     try {
       const findBranch = this.branches.find(
         (branch) => branch.name === branchName
@@ -40,7 +40,7 @@ class Bank {
     }
   }
   // Method to add customer to a branch
-  addCustomer(branch: Branch, customer: Customer) {
+  addCustomer(branch: Branch, customer: Customer):boolean {
     try {
       const foundBranch = this.findBranchByName(branch.getName());
       if (foundBranch) {
@@ -50,11 +50,11 @@ class Bank {
       return false;
     } catch (error) {
       console.log(` ${error}`);
-    
+    return false;
     }
   }
   // Method to add transaction for a customer of a branch
-  addCustomerTransaction(branch: Branch, customerId: number, amount: number) {
+  addCustomerTransaction(branch: Branch, customerId: number, amount: number):boolean {
     try {
       const specificBranch = this.findBranchByName(branch.name);
       if (specificBranch) {
@@ -64,11 +64,11 @@ class Bank {
       return false;
     } catch (error) {
       console.log(` ${error}`);
-    
+    return false;
     }
   }
   // Method to check if a branch is part of the bank
-  checkBranch(branch: Branch) {
+  checkBranch(branch: Branch):boolean {
     try {
       if (this.checkBranch(branch)) {
         return true;
@@ -91,7 +91,7 @@ class Bank {
   }
 
   // Method to list customers of a branch
-  listCustomers(branch: Branch, includeTransactions: boolean) {
+  listCustomers(branch: Branch, includeTransactions: boolean):void {
     try {
       const specificBranch = this.findBranchByName(branch.getName());
       if (specificBranch) {
